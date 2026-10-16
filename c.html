@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<meta name="theme-color" content="#0E0E10">
+<title>对一遍</title>
+<style>
+  :root{
+    --bg:#0E0E10;
+    --panel:#16161A;
+    --ink:#E8E8EA;
+    --ink-2:#9A9AA2;
+    --ink-3:#61616B;
+    --accent:#F5C518;
+    --hair:#2A2A31;
+    --hair-2:#3A3A43;
+  }
+  *{ box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  html,body{ margin:0; padding:0; }
+  [hidden]{ display:none !important; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:16px;
+    line-height:1.9;
+    letter-spacing:.02em;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+
+  /* ── 页头 ───────────────────────────────────────────── */
+  .top{
+    position:relative;
+    padding:60px 24px 44px;
+    border-bottom:1px solid var(--hair);
+    overflow:hidden;
+  }
+  .top::after{
+    content:"";
+    position:absolute;
+    right:-30px; top:26px;
+    width:120px; height:200px;
+    background:var(--accent);
+    opacity:.06;
+    transform:skewX(-18deg);
+    pointer-events:none;
+  }
+  .kicker{
+    font-size:11px;
+    letter-spacing:.42em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin:0 0 20px;
+  }
+  .top h1{
+    margin:0 0 18px;
+    font-size:40px;
+    line-height:1.15;
+    font-weight:800;
+    letter-spacing:.1em;
+  }
+  .top .bar{
+    width:44px; height:3px;
+    background:var(--accent);
+    margin:0 0 22px;
+  }
+  .top p{
+    margin:0;
+    max-width:20em;
+    font-size:14.5px;
+    line-height:2;
+    color:var(--ink-2);
+    letter-spacing:.04em;
+  }
+
+  .wrap{
+    max-width:34rem;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ── 说明 ───────────────────────────────────────────── */
+  .lead{
+    padding:44px 0 0;
+    margin:0;
+    font-size:14.5px;
+    line-height:2.05;
+    color:var(--ink-2);
+    letter-spacing:.04em;
+  }
+  .lead b{ color:var(--ink); font-weight:700; }
+  .lead .hl{ color:var(--accent); }
+
+  /* ── 章节头 ─────────────────────────────────────────── */
+  .sec{ padding:64px 0 0; }
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    margin-bottom:10px;
+  }
+  .sec-num{
+    font-size:34px;
+    line-height:1;
+    font-weight:800;
+    color:var(--accent);
+    letter-spacing:.02em;
+    margin-right:14px;
+  }
+  .sec-lat{
+    font-size:10.5px;
+    letter-spacing:.4em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding-bottom:3px;
+  }
+  .sec-head + .sec-line{
+    width:100%;
+    height:1px;
+    background:var(--hair);
+    margin-bottom:30px;
+  }
+  .when{
+    margin:0 0 16px;
+    font-size:12px;
+    letter-spacing:.22em;
+    color:var(--ink-3);
+  }
+
+  /* ── 题面 ───────────────────────────────────────────── */
+  .ask-lead{
+    margin:0 0 14px;
+    font-size:14.5px;
+    line-height:2;
+    color:var(--ink-2);
+    letter-spacing:.04em;
+  }
+  .say{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--hair);
+    padding:24px 20px 22px;
+    margin:0 0 12px;
+    overflow:hidden;
+  }
+  .say::before{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:4px; height:100%;
+    background:var(--accent);
+  }
+  .say .who{
+    display:block;
+    font-size:11px;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin-bottom:10px;
+  }
+  .say p{
+    margin:0;
+    font-size:18px;
+    line-height:1.95;
+    font-weight:700;
+    letter-spacing:.04em;
+    word-break:break-word;
+  }
+  .q-line{
+    margin:0 0 18px;
+    font-size:15px;
+    line-height:2;
+    color:var(--ink);
+    letter-spacing:.03em;
+  }
+  .q-line .dim{ color:var(--ink-2); }
+
+  /* ── 输入 ───────────────────────────────────────────── */
+  textarea.field{
+    display:block;
+    width:100%;
+    min-height:104px;
+    resize:vertical;
+    background:var(--panel);
+    border:1px solid var(--hair);
+    border-radius:0;
+    color:var(--ink);
+    font:inherit;
+    font-size:16px;
+    line-height:1.95;
+    letter-spacing:.03em;
+    padding:15px 16px;
+    margin:0 0 14px;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  textarea.field::placeholder{ color:#4C4C55; }
+  textarea.field:focus{
+    outline:none;
+    border-color:var(--accent);
+  }
+  textarea.field:disabled{ opacity:.5; }
+
+  .btn{
+    display:block;
+    width:100%;
+    background:transparent;
+    border:1px solid var(--accent);
+    border-radius:0;
+    color:var(--accent);
+    font:inherit;
+    font-size:16px;
+    font-weight:800;
+    letter-spacing:.22em;
+    padding:17px 16px;
+    margin:0;
+    cursor:pointer;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .btn:active{ background:rgba(245,197,24,.16); }
+  .btn:disabled{
+    border-color:var(--hair-2);
+    color:var(--ink-3);
+    cursor:default;
+  }
+  .hint{
+    margin:12px 0 0;
+    font-size:12.5px;
+    line-height:1.9;
+    letter-spacing:.05em;
+    color:var(--ink-2);
+  }
+
+  /* ── 展开后的聊天记录 ───────────────────────────────── */
+  .rec{ padding:26px 0 0; }
+  .rec-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin:0 0 14px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--hair);
+  }
+  .rec-head .zh{
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.2em;
+    color:var(--accent);
+  }
+  .rec-head .lat{
+    font-size:10px;
+    letter-spacing:.34em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+
+  .chat{
+    background:var(--panel);
+    border:1px solid var(--hair);
+    margin:0;
+    padding:5px 0;
+  }
+  .chat .ln{
+    padding:14px 16px 15px;
+    border-left:2px solid var(--hair-2);
+    border-bottom:1px solid rgba(42,42,49,.7);
+  }
+  .chat .ln:last-child{ border-bottom:0; }
+  .chat .ln.them{
+    border-left-color:var(--accent);
+    background:rgba(245,197,24,.04);
+  }
+  .chat .meta{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin:0 0 8px;
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--ink-3);
+  }
+  .chat .chip{
+    font-size:11.5px;
+    font-weight:800;
+    letter-spacing:.2em;
+    color:var(--ink-3);
+    padding-left:12px;
+  }
+  .chat .ln.them .chip{ color:var(--accent); }
+  .chat .txt{
+    margin:0;
+    font-size:16px;
+    line-height:1.95;
+    letter-spacing:.03em;
+    color:#D6D6DA;
+    word-break:break-word;
+    overflow-wrap:break-word;
+  }
+  .chat .ln.them .txt{ color:var(--ink); font-weight:600; }
+
+  .rec-note{
+    margin:0 0 16px;
+    font-size:13px;
+    line-height:1.95;
+    letter-spacing:.05em;
+    color:var(--ink-2);
+  }
+  .rec-note b{ color:var(--accent); font-weight:700; }
+
+  /* ── 三题之后 ───────────────────────────────────────── */
+  .gate{
+    position:relative;
+    display:block;
+    text-decoration:none;
+    border:1px solid var(--accent);
+    background:transparent;
+    padding:20px 22px;
+    margin:26px 0 34px;
+    overflow:hidden;
+  }
+  .gate::before{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:4px; height:100%;
+    background:var(--accent);
+  }
+  .gate::after{
+    content:"";
+    position:absolute;
+    right:-24px; top:-24px;
+    width:72px; height:72px;
+    background:var(--accent);
+    opacity:.1;
+    transform:skewX(-20deg);
+  }
+  .gate .lat{
+    display:block;
+    font-size:10px;
+    letter-spacing:.34em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:9px;
+  }
+  .gate .zh{
+    display:block;
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:.14em;
+    color:var(--ink);
+    margin-bottom:7px;
+  }
+  .gate .hint{
+    display:block;
+    font-size:12.5px;
+    letter-spacing:.06em;
+    color:var(--ink-2);
+    margin:0;
+  }
+  .gate.locked{
+    border-color:var(--hair-2);
+    pointer-events:none;
+  }
+  .gate.locked::before,
+  .gate.locked::after{ background:var(--hair-2); }
+  .gate.locked .lat{ color:var(--ink-3); }
+  .gate.locked .zh{ color:var(--ink-3); }
+
+  .done{
+    margin:26px 0 0;
+    font-size:13px;
+    line-height:1.95;
+    letter-spacing:.06em;
+    color:var(--accent);
+  }
+
+  /* ── 底部：不显眼的出口 ─────────────────────────────── */
+  .foot{
+    padding:56px 0 60px;
+    border-top:1px solid var(--hair);
+    margin-top:64px;
+  }
+  .foot .tiny{
+    margin:0;
+    font-size:11px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .skip{
+    display:inline-block;
+    margin:16px 0 0;
+    font-size:12.5px;
+    letter-spacing:.08em;
+    color:var(--ink-3);
+    text-decoration:none;
+    border-bottom:1px solid var(--hair-2);
+    padding-bottom:2px;
+  }
+  .skip:active{ color:var(--ink-2); }
+
+  @media (min-width:560px){
+    body{ font-size:16.5px; }
+    .top{ padding:78px 34px 56px; }
+    .top h1{ font-size:48px; }
+    .wrap{ padding:0 34px; }
+    .sec{ padding:80px 0 0; }
+    .sec-num{ font-size:40px; }
+    .say{ padding:28px 26px 24px; }
+    .say p{ font-size:20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="kicker">Puzzle / 03</p>
+  <h1>对&nbsp;一&nbsp;遍</h1>
+  <div class="bar"></div>
+  <p>三个时间点，三个框。<br>写完，我把当时那段记录给你看。</p>
+</header>
+
+<main class="wrap">
+
+  <p class="lead">
+    不考你，也不打分。<b>随便写</b>，一句话就够，写错也没关系。<br>
+    你先把记得的写下来，然后我把<span class="hl">当时真正发生的那一段</span>翻出来，放在你写的下面。<br>
+    是你记的那一版，和记录里的那一版，对一遍。
+  </p>
+
+  <!-- ══════════ 01 密室逃脱 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <span class="sec-lat">The Scary One</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <p class="when">2024-08-09</p>
+    <p class="ask-lead">那天晚上，我发了一句：</p>
+    <div class="say">
+      <span class="who">我</span>
+      <p>我报名了领导。</p>
+    </div>
+    <p class="ask-lead">紧跟着问了一句「还要我吗？」，第二天又说「明天一定要保我。」</p>
+    <p class="q-line">那是什么？<span class="dim">写一句就好。</span></p>
+
+    <textarea id="in1" class="field" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="我记得那次是……"></textarea>
+    <button id="go1" class="btn" type="button">写好了，看记录</button>
+    <p id="hint1" class="hint" hidden>先写一句，随便写。</p>
+
+    <div class="rec" id="rec1" hidden>
+      <div class="rec-head">
+        <span class="zh">当时那段</span>
+        <span class="lat">2024-08-09</span>
+      </div>
+
+      <div class="chat">
+        <div class="ln me">
+          <p class="meta"><span>2024-08-09 20:10:40</span><span class="chip">我</span></p>
+          <p class="txt">我报名了领导</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2024-08-09 20:10:48</span><span class="chip">我</span></p>
+          <p class="txt">还要我吗</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2024-08-09 20:11:19</span><span class="chip">她</span></p>
+          <p class="txt">我天呢</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2024-08-09 20:11:23</span><span class="chip">她</span></p>
+          <p class="txt">来！</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2024-08-09 20:12:07</span><span class="chip">我</span></p>
+          <p class="txt">连跪六把我怨气现在比女鬼还重</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2024-08-09 20:13:01</span><span class="chip">她</span></p>
+          <p class="txt">等会工作人员应该会拉群</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2024-08-09 20:13:07</span><span class="chip">我</span></p>
+          <p class="txt">明天一定要保我</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2024-08-09 20:13:27</span><span class="chip">她</span></p>
+          <p class="txt">👌👌👌</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2024-08-09 20:14:58</span><span class="chip">我</span></p>
+          <p class="txt">嚎</p>
+        </div>
+      </div>
+
+      <p class="rec-note">报名是八月九日晚上，去玩是<b>第二天</b>。那句「明天一定要保我」，说的是别把我一个人丢下。</p>
+
+      <p class="rec-note" style="margin:30px 0 12px;">九个月之后，我们又聊起这件事：</p>
+
+      <div class="chat">
+        <div class="ln them">
+          <p class="meta"><span>2025-05-01 21:45:32</span><span class="chip">她</span></p>
+          <p class="txt">看来那次鬼屋确实消耗毕生胆量了</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-01 21:47:01</span><span class="chip">我</span></p>
+          <p class="txt">玩的时候很怕</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-01 21:47:06</span><span class="chip">我</span></p>
+          <p class="txt">想的时候很爽</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-01 21:47:09</span><span class="chip">我</span></p>
+          <p class="txt">不知道为啥</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2025-05-01 21:47:37</span><span class="chip">她</span></p>
+          <p class="txt">我好像是反过来</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2025-05-01 21:48:12</span><span class="chip">她</span></p>
+          <p class="txt">玩的时候很爽 玩完后“哎吃啥啊，累了”</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-01 21:49:49</span><span class="chip">我</span></p>
+          <p class="txt">主要是因为我鬼一来就闭眼睛</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-01 21:49:58</span><span class="chip">我</span></p>
+          <p class="txt">其实想起来就啥也没看见</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-01 21:50:09</span><span class="chip">我</span></p>
+          <p class="txt">所以想起来的只有爽</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2025-05-01 21:50:17</span><span class="chip">她</span></p>
+          <p class="txt">幸好人比较多捏</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-01 21:50:45</span><span class="chip">我</span></p>
+          <p class="txt">没你我死都不可能去的</p>
+        </div>
+      </div>
+
+      <p class="rec-note">所以那是<b>密室逃脱</b>。你当时管它叫「鬼屋」——「消耗毕生胆量」这句，我一直记着。</p>
+    </div>
+  </section>
+
+  <!-- ══════════ 02 生日 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <span class="sec-lat">That Birthday</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <p class="when">2025-05</p>
+    <p class="ask-lead">你生日那阵子，我跟你说过：</p>
+    <div class="say">
+      <span class="who">我</span>
+      <p>想把礼物给你。</p>
+    </div>
+    <p class="q-line">那天我带了什么、我们去了哪儿？<span class="dim">写一句就好。</span></p>
+
+    <textarea id="in2" class="field" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="那天我带着……"></textarea>
+    <button id="go2" class="btn" type="button">写好了，看记录</button>
+    <p id="hint2" class="hint" hidden>先写一句，随便写。</p>
+
+    <div class="rec" id="rec2" hidden>
+      <div class="rec-head">
+        <span class="zh">当时那段</span>
+        <span class="lat">2025-05-13 / 17 / 21</span>
+      </div>
+
+      <div class="chat">
+        <div class="ln me">
+          <p class="meta"><span>2025-05-13 00:28:03</span><span class="chip">我</span></p>
+          <p class="txt">但是那天是你生日</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-17 08:36:18</span><span class="chip">我</span></p>
+          <p class="txt">生日快乐</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-21 15:22:58</span><span class="chip">我</span></p>
+          <p class="txt">想把礼物给你</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2025-05-21 15:23:27</span><span class="chip">她</span></p>
+          <p class="txt">草 今天吗</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2025-05-21 15:24:37</span><span class="chip">她</span></p>
+          <p class="txt">没</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2025-05-21 15:25:08</span><span class="chip">她</span></p>
+          <p class="txt">你要过来吗</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-21 15:26:42</span><span class="chip">我</span></p>
+          <p class="txt">来</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-21 15:28:40</span><span class="chip">我</span></p>
+          <p class="txt">去找点好吃的吧</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2025-05-21 15:35:07</span><span class="chip">她</span></p>
+          <p class="txt">怕死</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2025-05-21 15:38:44</span><span class="chip">她</span></p>
+          <p class="txt">吃呗</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-21 15:40:11</span><span class="chip">我</span></p>
+          <p class="txt">很快就到你家门口</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2025-05-21 17:29:30</span><span class="chip">我</span></p>
+          <p class="txt">就位</p>
+        </div>
+      </div>
+
+      <p class="rec-note">「想把礼物给你」是<b>五月二十一号</b>下午说的。那天的收尾是「就位」——我在你家门口。</p>
+    </div>
+  </section>
+
+  <!-- ══════════ 03 河北 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <span class="sec-lat">This Summer</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <p class="when">2026-07 / 2026-08</p>
+    <p class="ask-lead">七月底我跟你说想回来，你回了一句：</p>
+    <div class="say">
+      <span class="who">她</span>
+      <p>回来吧最骄傲的信仰</p>
+    </div>
+    <p class="q-line">八月一号那天，你说你「有点感觉我是不是要回来」。<span class="dim">那是怎么回事？写一句就好。</span></p>
+
+    <textarea id="in3" class="field" rows="3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="我当时以为……"></textarea>
+    <button id="go3" class="btn" type="button">写好了，看记录</button>
+    <p id="hint3" class="hint" hidden>先写一句，随便写。</p>
+
+    <div class="rec" id="rec3" hidden>
+      <div class="rec-head">
+        <span class="zh">当时那段</span>
+        <span class="lat">2026-07-27 / 08-01</span>
+      </div>
+
+      <div class="chat">
+        <div class="ln me">
+          <p class="meta"><span>2026-07-27 22:31:48</span><span class="chip">我</span></p>
+          <p class="txt">不过我还是想回来</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2026-07-27 22:32:08</span><span class="chip">我</span></p>
+          <p class="txt">现在的主线任务是逃离河北</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2026-07-27 22:35:42</span><span class="chip">她</span></p>
+          <p class="txt">回来吧最骄傲的信仰[呲牙]</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2026-08-01 19:25:13</span><span class="chip">我</span></p>
+          <p class="txt">今天的特殊cg喜欢吗</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2026-08-01 19:28:19</span><span class="chip">她</span></p>
+          <p class="txt">惊吓</p>
+        </div>
+        <div class="ln them">
+          <p class="meta"><span>2026-08-01 19:30:25</span><span class="chip">她</span></p>
+          <p class="txt">我在你要周六一起看的时候有点感觉你是不是要回来[Emm]</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2026-08-01 19:30:58</span><span class="chip">我</span></p>
+          <p class="txt">还真不是</p>
+        </div>
+        <div class="ln me">
+          <p class="meta"><span>2026-08-01 19:32:12</span><span class="chip">我</span></p>
+          <p class="txt">那天去完石家庄发现办不下来才回来的</p>
+        </div>
+      </div>
+
+      <p class="rec-note">你猜的是「要回来了」。八月一号那天我<b>真的已经回来了</b>——但不是为了回来而回来，是去石家庄办事没办成，才回的这一趟。</p>
+    </div>
+  </section>
+
+  <!-- ══════════ 三题之后 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <span class="sec-lat">Next</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <p id="gateHint" class="hint" style="margin:0 0 14px;">三个框都写完，这里就开了。<span id="gateCount">（0 / 3）</span></p>
+
+    <a class="gate locked" id="gate" href="three.html" aria-disabled="true">
+      <span class="lat">Record / 2023 &ndash; 2026</span>
+      <span class="zh" id="gateZh">通往「三年」</span>
+      <span class="hint" id="gateHint2">先回去把上面三个框写完。</span>
+    </a>
+  </section>
+
+  <div class="foot">
+    <p class="tiny">Private</p>
+    <a class="skip" href="three.html">不想写，直接进去 &rarr;</a>
+  </div>
+
+</main>
+
+<script>
+(function(){
+  var d = document;
+
+  /* ★★★ 下一页的地址 ★★★ */
+  var NEXT_URL = 'three.html';
+
+  var QS = [
+    { n:1, key:'q1' },
+    { n:2, key:'q2' },
+    { n:3, key:'q3' }
+  ];
+
+  var seen = { q1:false, q2:false, q3:false };
+
+  function $(id){ return d.getElementById(id); }
+
+  function refreshGate(){
+    var done = 0;
+    for (var i = 0; i < QS.length; i++){
+      if (seen[QS[i].key]) { done++; }
+    }
+    $('gateCount').textContent = '（' + done + ' / 3）';
+    var gate = $('gate');
+    if (done === 3){
+      gate.className = 'gate';
+      gate.removeAttribute('aria-disabled');
+      $('gateZh').textContent = '通往「三年」';
+      $('gateHint2').textContent = '点这里 →';
+      var gh = $('gateHint');
+      if (gh && gh.firstChild && gh.firstChild.nodeType === 3){
+        gh.firstChild.nodeValue = '三个都写完了。剩下的在那儿。';
+      } else {
+        gh.textContent = '三个都写完了。剩下的在那儿。';
+      }
+    }
+  }
+
+  function bind(n, key){
+    var ta   = $('in' + n);
+    var go   = $('go' + n);
+    var hint = $('hint' + n);
+    var rec  = $('rec' + n);
+
+    function submit(){
+      var v = (ta.value || '').replace(/\s+/g, '');
+      if (!v){
+        hint.hidden = false;
+        try { ta.focus(); } catch(e){}
+        return;
+      }
+      hint.hidden = true;
+      rec.hidden = false;
+      ta.disabled = true;
+      ta.style.opacity = '.55';
+      go.textContent = '这一段在这儿了';
+      go.disabled = true;
+      if (!seen[key]){
+        seen[key] = true;
+        refreshGate();
+      }
+      try {
+        rec.scrollIntoView({ behavior:'smooth', block:'start' });
+      } catch(e){
+        try { rec.scrollIntoView(); } catch(e2){}
+      }
+    }
+
+    go.addEventListener('click', submit);
+    ta.addEventListener('keydown', function(e){
+      if ((e.key === 'Enter' || e.keyCode === 13) && (e.metaKey || e.ctrlKey)){
+        e.preventDefault();
+        submit();
+      }
+    });
+  }
+
+  for (var i = 0; i < QS.length; i++){
+    bind(QS[i].n, QS[i].key);
+  }
+
+  refreshGate();
+})();
+</script>
+
+</body>
+</html>

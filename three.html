@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<meta name="theme-color" content="#0E0E10">
+<title>三年</title>
+<style>
+  :root{
+    --bg:#0E0E10;
+    --panel:#16161A;
+    --ink:#E8E8EA;
+    --ink-2:#9A9AA2;
+    --ink-3:#61616B;
+    --accent:#F5C518;
+    --hair:#2A2A31;
+    --hair-2:#3A3A43;
+  }
+  *{ box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:16px;
+    line-height:1.9;
+    letter-spacing:.02em;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+
+  /* ── 头部 ───────────────────────────────────────────── */
+  .top{
+    position:relative;
+    padding:60px 24px 44px;
+    border-bottom:1px solid var(--hair);
+    overflow:hidden;
+  }
+  .top::after{
+    content:"";
+    position:absolute;
+    right:-30px; top:26px;
+    width:120px; height:200px;
+    background:var(--accent);
+    opacity:.06;
+    transform:skewX(-18deg);
+    pointer-events:none;
+  }
+  .kicker{
+    font-size:11px;
+    letter-spacing:.42em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin:0 0 20px;
+  }
+  .top h1{
+    margin:0 0 18px;
+    font-size:40px;
+    line-height:1.15;
+    font-weight:800;
+    letter-spacing:.1em;
+  }
+  .top .bar{
+    width:44px; height:3px;
+    background:var(--accent);
+    margin:0 0 22px;
+  }
+  .top p{
+    margin:0;
+    max-width:20em;
+    font-size:14.5px;
+    line-height:2;
+    color:var(--ink-2);
+    letter-spacing:.04em;
+  }
+
+  .wrap{
+    max-width:34rem;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ── 章节头 ─────────────────────────────────────────── */
+  .sec{ padding:64px 0 0; }
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    margin-bottom:10px;
+  }
+  .sec-num{
+    font-size:34px;
+    line-height:1;
+    font-weight:800;
+    color:var(--accent);
+    letter-spacing:.02em;
+    margin-right:14px;
+  }
+  .sec-lat{
+    font-size:10.5px;
+    letter-spacing:.4em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding-bottom:3px;
+  }
+  .sec-head + .sec-line{
+    width:100%;
+    height:1px;
+    background:var(--hair);
+    margin-bottom:30px;
+  }
+  .sec-note{
+    margin:0 0 30px;
+    font-size:13.5px;
+    line-height:1.95;
+    color:var(--ink-2);
+    letter-spacing:.04em;
+  }
+
+  /* ── 01 的显眼一句话 ────────────────────────────────── */
+  .creed{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--hair);
+    padding:30px 22px 28px;
+    margin:0 0 40px;
+    overflow:hidden;
+  }
+  .creed::before{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:4px; height:100%;
+    background:var(--accent);
+  }
+  .creed::after{
+    content:"";
+    position:absolute;
+    right:-22px; top:-22px;
+    width:80px; height:80px;
+    background:var(--accent);
+    opacity:.09;
+    transform:skewX(-20deg);
+    pointer-events:none;
+  }
+  .creed p{
+    margin:0;
+    font-size:23px;
+    line-height:1.75;
+    font-weight:800;
+    letter-spacing:.06em;
+  }
+  .creed p + p{
+    margin-top:12px;
+    font-size:17px;
+    font-weight:600;
+    color:var(--ink-2);
+    letter-spacing:.05em;
+  }
+
+  /* ── 排除项 ─────────────────────────────────────────── */
+  .rule{ margin:0 0 30px; }
+  .rule:last-child{ margin-bottom:0; }
+  .rule h3{
+    display:flex;
+    align-items:baseline;
+    margin:0 0 12px;
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:.1em;
+  }
+  .rule h3::before{
+    content:"";
+    display:inline-block;
+    width:7px; height:7px;
+    background:var(--accent);
+    margin-right:11px;
+    flex:0 0 auto;
+  }
+  .rule p{
+    margin:0 0 12px;
+    font-size:14.5px;
+    line-height:2;
+    color:#CDCDD2;
+    letter-spacing:.04em;
+  }
+  .rule p:last-child{ margin-bottom:0; }
+  .rule .dim{ color:var(--ink-2); font-size:13.5px; }
+  .nums{
+    border-top:1px solid var(--hair);
+    border-bottom:1px solid var(--hair);
+    margin:0 0 14px;
+    padding:14px 0 12px;
+  }
+  .nums span{
+    display:block;
+    font-size:14px;
+    line-height:2.05;
+    color:#CDCDD2;
+    letter-spacing:.04em;
+  }
+  .nums b{
+    color:var(--accent);
+    font-weight:700;
+    letter-spacing:.04em;
+  }
+  .wordbank{
+    font-size:13px;
+    line-height:2.1;
+    color:var(--ink-3);
+    letter-spacing:.06em;
+    margin:0 0 14px;
+  }
+  .q{
+    margin:0 0 10px;
+    padding:0 0 0 15px;
+    border-left:1px solid var(--hair-2);
+    font-size:14.5px;
+    line-height:2;
+    color:#D6D6DA;
+  }
+  .q:last-child{ margin-bottom:0; }
+  .q .who{
+    color:var(--ink-3);
+    font-size:12.5px;
+    letter-spacing:.1em;
+    margin-right:4px;
+  }
+  .q .t{
+    color:var(--ink-3);
+    font-size:12px;
+    letter-spacing:.08em;
+    margin-left:6px;
+  }
+  .q .ang{ color:var(--accent); letter-spacing:.04em; }
+
+  /* ── 游戏清单 ───────────────────────────────────────── */
+  .games{ border-top:1px solid var(--hair); }
+  .game{
+    position:relative;
+    padding:22px 6px 20px 0;
+    border-bottom:1px solid var(--hair);
+  }
+  .game .name{
+    display:block;
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:.1em;
+    margin-bottom:11px;
+  }
+  .game .name::before{
+    content:"";
+    display:inline-block;
+    width:6px; height:6px;
+    background:var(--accent);
+    margin-right:11px;
+    vertical-align:middle;
+  }
+
+  /* ── 词条卡 ─────────────────────────────────────────── */
+  .card{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--hair);
+    padding:22px 20px 20px;
+    margin-bottom:14px;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:3px; height:100%;
+    background:var(--accent);
+  }
+  .card::after{
+    content:"";
+    position:absolute;
+    right:-18px; top:-18px;
+    width:56px; height:56px;
+    background:var(--accent);
+    opacity:.07;
+    transform:skewX(-20deg);
+    pointer-events:none;
+  }
+  .card h3{
+    margin:0 0 11px;
+    font-size:19px;
+    font-weight:800;
+    letter-spacing:.12em;
+    color:var(--ink);
+  }
+  .card h3 em{
+    display:block;
+    font-style:normal;
+    font-size:10px;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:400;
+    margin-top:9px;
+  }
+  .card p{
+    margin:0 0 10px;
+    font-size:14.5px;
+    line-height:1.95;
+    color:#CDCDD2;
+    letter-spacing:.04em;
+  }
+  .card p:last-child{ margin-bottom:0; }
+  .card .fish{
+    color:var(--accent);
+    font-size:16px;
+    letter-spacing:.05em;
+  }
+
+  /* ── 神作清单 ───────────────────────────────────────── */
+  .scroll{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    border-top:1px solid var(--hair);
+  }
+  table{
+    border-collapse:collapse;
+    width:100%;
+    min-width:100%;
+    font-size:14.5px;
+  }
+  th,td{
+    text-align:left;
+    padding:14px 14px 14px 0;
+    border-bottom:1px solid var(--hair);
+    vertical-align:top;
+    letter-spacing:.04em;
+  }
+  th{
+    font-size:10px;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    font-weight:400;
+    white-space:nowrap;
+    padding-bottom:10px;
+  }
+  td.n{
+    color:var(--accent);
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.16em;
+    white-space:nowrap;
+    padding-right:18px;
+    width:1%;
+  }
+  td.q2{
+    font-size:14px;
+    line-height:1.9;
+    color:#CDCDD2;
+  }
+
+  /* ── 结尾 / 入口 ────────────────────────────────────── */
+  .end{
+    margin-top:76px;
+    border-top:1px solid var(--hair);
+    padding:56px 0 0;
+  }
+  .end .close{
+    margin:0 0 40px;
+    font-size:16px;
+    font-weight:600;
+    line-height:2.1;
+    letter-spacing:.06em;
+    color:var(--ink-2);
+  }
+  .end .close .mark{
+    display:block;
+    width:34px; height:3px;
+    background:var(--accent);
+    margin-bottom:22px;
+  }
+
+  .gate{
+    display:block;
+    position:relative;
+    text-decoration:none;
+    border:1px solid var(--accent);
+    background:transparent;
+    padding:20px 22px;
+    overflow:hidden;
+  }
+  .gate::before{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:4px; height:100%;
+    background:var(--accent);
+  }
+  .gate::after{
+    content:"";
+    position:absolute;
+    right:-24px; top:-24px;
+    width:72px; height:72px;
+    background:var(--accent);
+    opacity:.1;
+    transform:skewX(-20deg);
+  }
+  .gate .lat{
+    display:block;
+    font-size:10px;
+    letter-spacing:.34em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:9px;
+  }
+  .gate .zh{
+    display:block;
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:.14em;
+    color:var(--ink);
+    margin-bottom:7px;
+  }
+  .gate .hint{
+    display:block;
+    font-size:12.5px;
+    letter-spacing:.06em;
+    color:var(--ink-2);
+  }
+
+  .foot{
+    padding:44px 0 56px;
+    font-size:11px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+
+  @media (min-width:560px){
+    body{ font-size:16.5px; }
+    .top{ padding:78px 34px 56px; }
+    .top h1{ font-size:48px; }
+    .wrap{ padding:0 34px; }
+    .sec{ padding:80px 0 0; }
+    .sec-num{ font-size:40px; }
+    .creed{ padding:36px 30px 34px; }
+    .creed p{ font-size:26px; }
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .js .fade{
+      opacity:0;
+      transform:translateY(12px);
+      transition:opacity .6s ease, transform .6s ease;
+    }
+    .js .fade.on{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="kicker">Record / 2023 &ndash; 2026</p>
+  <h1>三&nbsp;年</h1>
+  <div class="bar"></div>
+  <p>2023 &mdash; 2026。<br>从一句招呼开始，到现在还在说话。</p>
+</header>
+
+<main class="wrap">
+
+  <!-- ══════════ 01 我们是什么 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <span class="sec-lat">What We Are</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <div class="creed fade">
+      <p>实质上的亲密，名义上的搭子。</p>
+      <p>而那个「名义」，不是谁单方面维持的。</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ★★★  可 选 块 ①  ★★★
+         删掉下面整个 <div class="rule">…</div>（从这行注释到「可选块 ① 结束」），
+         页面其余部分照样完整。删掉它 = 不正面宣告「不是恋人」。
+         ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- ▼▼▼ 可选块 ① 开始 ▼▼▼ -->
+    <div class="rule fade">
+      <h3>不是恋人</h3>
+      <p>把下面这些词整库找一遍——</p>
+      <p class="wordbank">在一起 &nbsp;/&nbsp; 谈恋爱 &nbsp;/&nbsp; 恋人 &nbsp;/&nbsp; 情侣 &nbsp;/&nbsp; 暧昧 &nbsp;/&nbsp; 喜欢你 &nbsp;/&nbsp; 爱你 &nbsp;/&nbsp; 宝贝 &nbsp;/&nbsp; 亲爱的 &nbsp;/&nbsp; 告白 &nbsp;/&nbsp; 表白 &nbsp;/&nbsp; 约会</p>
+
+      <!-- ═══════════════════════════════════════════════════════
+           ★★★  可 选 块 ②  ★★★
+           删掉下面这一个 <p>…</p>（从这行注释到「可选块 ② 结束」）即可。
+           删掉它 = 不点明聊天记录被逐条找过。
+           ═══════════════════════════════════════════════════════ -->
+      <!-- ▼▼▼ 可选块 ② 开始 ▼▼▼ -->
+      <p><b>9 个词</b>，两万五千多条，<b>一次都没出现</b>。</p>
+      <!-- ▲▲▲ 可选块 ② 结束 ▲▲▲ -->
+
+      <p>剩下三个出现过。一个是干员名字连在一起的巧合；两个都在别人的故事里——一个是我自己编的整合运动段子，一个是她转述「读完研才许谈恋爱」的家规。</p>
+      <p>唯一一次出现「男朋友」，是在接一个梦的梗：梦里男朋友和家里的猫一起对我哈气。</p>
+    </div>
+    <!-- ▲▲▲ 可选块 ① 结束 ▲▲▲ -->
+
+    <div class="rule fade">
+      <h3>不是游戏搭子</h3>
+      <p>这些字出现的次数，不比游戏少——</p>
+      <div class="nums">
+        <span>吃饭这类字：<b>241</b> 次 &nbsp;:&nbsp; <b>209</b> 次</span>
+        <span>家人这类字：<b>170</b> 次 &nbsp;:&nbsp; <b>217</b> 次</span>
+        <span>身体这类字：<b>88</b> 次 &nbsp;:&nbsp; <b>107</b> 次</span>
+      </div>
+      <p class="dim">同日段里，七款游戏的名字加起来是 121 次 : 92 次。聊的早就不是游戏本身了。</p>
+    </div>
+
+    <div class="rule fade">
+      <h3>不是普通网友</h3>
+      <div class="nums">
+        <span>线下见过面：最早 <b>2024 年 6 月</b>，最晚 <b>2026 年 5 月</b></span>
+        <span>她来接我、或张罗接送：<b>6</b> 次</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════ 02 一起玩过的 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <span class="sec-lat">Games</span>
+    </div>
+    <div class="sec-line"></div>
+    <p class="sec-note">七款。每一条后面都是当时真正打过的那句话。</p>
+
+    <div class="games">
+
+      <div class="game fade">
+        <span class="name">只只大冒险</span>
+        <p class="q"><span class="who">我</span>只只我感觉比双人成行难<span class="t">2024-11-09 16:15:17</span></p>
+      </div>
+
+      <div class="game fade">
+        <span class="name">双人成行</span>
+        <p class="q"><span class="who">我</span>要不进双人成行试试？<span class="t">2025-03-06 20:15:57</span></p>
+      </div>
+
+      <div class="game fade">
+        <span class="name">双影奇境</span>
+        <p class="q"><span class="who">我</span>你电脑配置带双影奇境行嘛<span class="t">2025-02-11 11:01:10</span></p>
+      </div>
+
+      <div class="game fade">
+        <span class="name">哈迪斯</span>
+        <p class="q"><span class="who">我</span>哈迪斯甚至有联动音乐盒<span class="t">2025-03-16 20:33:20</span></p>
+      </div>
+
+      <div class="game fade">
+        <span class="name">艾尔登法环</span>
+        <p class="q"><span class="who">我</span>但是有一说一老头环对手柄友好太多了<span class="t">2025-01-09 19:50:22</span></p>
+      </div>
+
+      <div class="game fade">
+        <span class="name">明日方舟</span>
+        <p class="q"><span class="who">她</span>你看到tag 先锋干员+治疗<span class="t">2025-02-17 12:33:18</span></p>
+      </div>
+
+      <div class="game fade">
+        <span class="name">三角洲行动</span>
+        <p class="q"><span class="who">我</span>［人名，已隐去］怎么现在天天三角洲<span class="t">2025-06-12 16:41:25</span></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════ 03 明日方舟 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <span class="sec-lat">Arknights</span>
+    </div>
+    <div class="sec-line"></div>
+    <p class="sec-note">这个游戏本来是你的。是我先开的那个口 —— 但你当天就把好友给了我。</p>
+
+    <p class="q"><span class="who">2024-11-21 23:29:43　我</span>我还以为你一直在粥</p>
+
+    <p class="q"><span class="who">2025-02-16 17:32:52　我</span>粥肝不肝的啊</p>
+    <p class="q"><span class="who">2025-02-16 17:35:27　我</span>你在官服？</p>
+    <p class="q"><span class="who">2025-02-16 17:35:55　我</span>我瞅瞅去</p>
+    <p class="q"><span class="who">2025-02-16 18:27:59　她</span>加我好友</p>
+    <p style="margin:0 0 30px;font-size:13.5px;line-height:1.95;color:var(--ink-2);letter-spacing:.04em;">从「我瞅瞅去」到「加我好友」，隔了 52 分钟。</p>
+
+    <p class="q"><span class="who">2025-02-16 18:51:28　她</span>随便点 不要点新手tag 时间拉满9小时就行</p>
+    <p style="margin:0 0 30px;font-size:13.5px;line-height:1.95;color:var(--ink-2);letter-spacing:.04em;">这个月两个人在说的话，比上个月多了 4.57 倍。1993 条对 436 条。</p>
+
+    <p class="q"><span class="who">2025-02-17 12:33:18　她</span>你看到tag 先锋干员+治疗</p>
+
+    <p class="q"><span class="who">2025-02-18 18:02:47　她</span>这个是剿灭快速过关券，剿灭是一个可以刷抽卡资源的关卡，一周可得1800玉，你通关过一次后，使用这个券可以直接过关拿奖励</p>
+    <p style="margin:0 0 30px;font-size:13.5px;line-height:1.95;color:var(--ink-2);letter-spacing:.04em;">一条 60 多个字的讲解，从什么是剿灭讲到券怎么用。这种消息那个月还有很多。</p>
+
+    <p class="q"><span class="who">2025-02-18 18:24:00　她</span>你要什么高练干员要我换就可以</p>
+
+    <div class="creed fade" style="margin:0 0 30px;">
+      <p>哪天你氪金了鹰角真该付我推销费</p>
+      <p>2025-03-16 21:18:13　她</p>
+    </div>
+
+    <p class="q"><span class="who">2025-06-04 08:53:50　她</span>说新材料的别称叫小罐茶</p>
+    <p class="q"><span class="who">2025-08-02 17:51:03　她</span>活动关卡能刷小罐茶了</p>
+    <p style="margin:0 0 30px;font-size:13.5px;line-height:1.95;color:var(--ink-2);letter-spacing:.04em;">这个词是她自己造的，之后她一直这么叫。</p>
+
+    <p class="q"><span class="who">2026-10-14 16:46:51　她</span>咱黍姐在帮本子和同人里没那么平</p>
+    <p style="margin:0 0 34px;font-size:13.5px;line-height:1.95;color:var(--ink-2);letter-spacing:.04em;">到 2026-10-14 还在聊，那是我们说话的最后一天。</p>
+
+    <p style="margin:0;font-size:17px;line-height:2.05;font-weight:700;letter-spacing:.07em;">我先问的。但留下来，是你教的。</p>
+
+  </section>
+
+  <!-- ══════════ 04 玩着玩着就有的词 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <span class="sec-lat">Words</span>
+    </div>
+    <div class="sec-line"></div>
+    <p class="sec-note">只有一个游戏玩久了，才会长出这些说法。</p>
+
+    <div class="card fade">
+      <h3>上号<em>35 次 &middot; 我 19 / 她 16</em></h3>
+      <p>两边都在用这两个字叫人。谁说了，另一个就知道该开机了。</p>
+      <p>后来她拿它当认我的凭据——</p>
+      <p class="q"><span class="who">她</span>比如你说三角洲上号其实你会简洁着说上号<span class="t">2026-10-14 20:00:16</span></p>
+    </div>
+
+    <div class="card fade">
+      <h3>大肥鱼<em>她是导演</em></h3>
+      <p>两天里从一句「让蓝鱼出来聊天」长出来的。她在导，我在演。</p>
+      <p class="q"><span class="who">她</span>让蓝鱼出来聊天<span class="t">15:16:36</span></p>
+      <p class="q"><span class="who">她</span>你能不能按照这个表情包卖萌<span class="t">15:20:44</span></p>
+      <p class="q"><span class="who">她</span>用颜文字卖萌<span class="t">15:21:39</span></p>
+      <p class="q"><span class="who">她</span>你用颜文字模拟鱼<span class="t">15:21:56</span></p>
+      <p class="q"><span class="who">她</span>就可以吐泡泡那种<span class="t">15:22:09</span></p>
+      <p class="q"><span class="who">我</span><span class="ang">＞＜((((°&gt; 大肥鱼游过来了</span><span class="t">15:22:13</span></p>
+      <p class="dim">上面六条都在 2026-10-14 下午。</p>
+    </div>
+
+  </section>
+
+  <!-- ══════════ 结尾 + 前往第二页 ══════════ -->
+  <section class="end">
+
+    <p class="close"><span class="mark"></span>这一页是摆出来的东西。<br>下一页才是要说的话。</p>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ★★★  前 往 第 二 页 的 入 口  ★★★
+         下面这个 <a class="gate" href="words.html"> 就是唯一入口。
+         · 想指到别的页面：把 href 属性里的 words.html 换成别的文件名
+           或一个完整的网页地址即可，链接的写法不用变。
+         · 想改按钮上的字：改 .gate .zh 那一行（现在是「还有一件事」），
+           以及 .gate .hint 那一行的说明小字。
+         · 不想跳转就整段删掉，这一页照样完整。
+         ═══════════════════════════════════════════════════════════ -->
+    <a class="gate" href="words.html">
+      <span class="lat">Open / Next</span>
+      <span class="zh">还有一件事</span>
+      <span class="hint">点这里 &rarr;</span>
+    </a>
+    <!-- ★★★  入 口 结 束  ★★★ -->
+
+  </section>
+
+  <p class="foot">Private</p>
+
+</main>
+
+<script>
+(function(){
+  var d = document;
+  d.documentElement.className += ' js';
+  var els = d.querySelectorAll('.fade');
+  if (!els.length) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function show(el){ el.className = el.className.replace(/\s*\bon\b/,'') + ' on'; }
+  if (reduce || !('IntersectionObserver' in window)) {
+    for (var i = 0; i < els.length; i++) show(els[i]);
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    for (var k = 0; k < entries.length; k++) {
+      if (entries[k].isIntersecting) { show(entries[k].target); io.unobserve(entries[k].target); }
+    }
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  for (var j = 0; j < els.length; j++) io.observe(els[j]);
+})();
+</script>
+
+</body>
+</html>

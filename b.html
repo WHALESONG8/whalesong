@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<meta name="theme-color" content="#0E0E10">
+<title>复原</title>
+<style>
+  :root{
+    --bg:#0E0E10;
+    --panel:#16161A;
+    --ink:#E8E8EA;
+    --ink-2:#9A9AA2;
+    --ink-3:#61616B;
+    --accent:#F5C518;
+    --hair:#2A2A31;
+    --hair-2:#3A3A43;
+  }
+  *{ box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  html,body{ margin:0; padding:0; }
+  [hidden]{ display:none !important; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:16px;
+    line-height:1.9;
+    letter-spacing:.02em;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+
+  /* 手电筒：按住时整页对比度拉满 */
+  body.torch{ filter:contrast(1.38) brightness(1.12); }
+
+  .top{
+    position:relative;
+    padding:60px 24px 44px;
+    border-bottom:1px solid var(--hair);
+    overflow:hidden;
+  }
+  .top::after{
+    content:"";
+    position:absolute;
+    right:-30px; top:26px;
+    width:120px; height:200px;
+    background:var(--accent);
+    opacity:.06;
+    transform:skewX(-18deg);
+    pointer-events:none;
+  }
+  .kicker{
+    font-size:11px;
+    letter-spacing:.42em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin:0 0 20px;
+  }
+  .top h1{
+    margin:0 0 18px;
+    font-size:40px;
+    line-height:1.15;
+    font-weight:800;
+    letter-spacing:.1em;
+  }
+  .top .bar{
+    width:44px; height:3px;
+    background:var(--accent);
+    margin:0 0 22px;
+  }
+  .top p{
+    margin:0;
+    max-width:20em;
+    font-size:14.5px;
+    line-height:2;
+    color:var(--ink-2);
+    letter-spacing:.04em;
+  }
+
+  .wrap{
+    max-width:34rem;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ── 画面 ───────────────────────────────────────────── */
+  .stage{
+    position:relative;
+    width:100%;
+    height:0;
+    padding-bottom:141.3%;
+    margin:34px 0 12px;
+    overflow:hidden;
+    background:#000;
+    border:1px solid var(--hair);
+  }
+  /* 底层的清晰图：只在最后一步露出来 */
+  .stage .clean{
+    position:absolute;
+    left:0; top:0;
+    z-index:0;
+    display:block;
+    width:100%;
+    height:100%;
+    max-width:none;
+    max-height:none;
+    opacity:0;
+    transition:opacity .65s ease;
+  }
+  .stage.clear .clean{ opacity:1; }
+  /* 碎块层 */
+  .shards{
+    position:absolute;
+    left:0; top:0; right:0; bottom:0;
+    z-index:1;
+    transition:opacity .75s ease;
+  }
+  .stage.clear .shards{ opacity:0; pointer-events:none; }
+  .tile{
+    position:absolute;
+    overflow:hidden;
+    background-image:url(shu.jpg);
+    background-repeat:no-repeat;
+    transition:transform .55s cubic-bezier(.22,.75,.24,1);
+  }
+  .secret{
+    position:absolute;
+    left:0; right:0; bottom:6%;
+    z-index:2;
+    padding:18px 14px;
+    text-align:center;
+    background:linear-gradient(180deg,
+      rgba(14,14,16,0) 0%,
+      rgba(14,14,16,.88) 26%,
+      rgba(14,14,16,.88) 74%,
+      rgba(14,14,16,0) 100%);
+    color:rgba(232,232,234,.07);
+    font-size:13.5px;
+    line-height:1.75;
+    letter-spacing:.1em;
+    word-break:break-all;
+    pointer-events:none;
+    transition:color .12s linear, text-shadow .12s linear;
+  }
+  body.torch .secret{
+    color:var(--accent);
+    text-shadow:0 0 12px rgba(245,197,24,.55);
+  }
+
+  .stage-note{
+    margin:0 0 6px;
+    font-size:13px;
+    line-height:1.95;
+    letter-spacing:.05em;
+    color:var(--ink-2);
+  }
+  .stage-note b{ color:var(--accent); font-weight:700; }
+
+  /* ── 手电筒按钮 ─────────────────────────────────────── */
+  .torchbar{
+    margin:22px 0 0;
+    padding:20px 20px 18px;
+    background:var(--panel);
+    border:1px solid var(--hair);
+    border-left:3px solid var(--accent);
+  }
+  .torch{
+    display:block;
+    width:100%;
+    background:transparent;
+    border:1px solid var(--accent);
+    border-radius:0;
+    color:var(--accent);
+    font:inherit;
+    font-size:16px;
+    font-weight:800;
+    letter-spacing:.22em;
+    padding:17px 16px;
+    cursor:pointer;
+    -webkit-appearance:none;
+    appearance:none;
+    -webkit-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
+  }
+  .torch.on,
+  .torch:active{ background:rgba(245,197,24,.16); }
+  .torchbar .hint{ margin:12px 0 0; }
+
+  /* ── 章节头 ─────────────────────────────────────────── */
+  .sec{ padding:64px 0 0; }
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    margin-bottom:10px;
+  }
+  .sec-num{
+    font-size:34px;
+    line-height:1;
+    font-weight:800;
+    color:var(--accent);
+    letter-spacing:.02em;
+    margin-right:14px;
+  }
+  .sec-lat{
+    font-size:10.5px;
+    letter-spacing:.4em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding-bottom:3px;
+  }
+  .sec-head + .sec-line{
+    width:100%;
+    height:1px;
+    background:var(--hair);
+    margin-bottom:30px;
+  }
+  .sec-note{
+    margin:0 0 24px;
+    font-size:13.5px;
+    line-height:1.95;
+    color:var(--ink-2);
+    letter-spacing:.04em;
+  }
+  .step{
+    margin:0 0 16px;
+    font-size:11px;
+    letter-spacing:.34em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+
+  /* ── 她说过的那句（名字挡掉） ───────────────────────── */
+  .say{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--hair);
+    padding:26px 20px 22px;
+    margin:0 0 10px;
+    overflow:hidden;
+  }
+  .say::before{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:4px; height:100%;
+    background:var(--accent);
+  }
+  .say p{
+    margin:0;
+    font-size:18px;
+    line-height:1.95;
+    font-weight:700;
+    letter-spacing:.04em;
+    word-break:break-word;
+  }
+  .say .bk{
+    color:var(--accent);
+    letter-spacing:.16em;
+  }
+  .when{
+    margin:0 0 26px;
+    font-size:12px;
+    letter-spacing:.1em;
+    color:var(--ink-3);
+  }
+
+  /* ── 输入 ───────────────────────────────────────────── */
+  .ask{
+    display:flex;
+    gap:10px;
+    align-items:stretch;
+    margin:0 0 14px;
+  }
+  .field{
+    flex:1 1 auto;
+    min-width:0;
+    background:var(--panel);
+    border:1px solid var(--hair-2);
+    border-radius:0;
+    color:var(--ink);
+    font:inherit;
+    font-size:17px;
+    letter-spacing:.08em;
+    padding:15px 16px;
+    outline:none;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .field::placeholder{ color:var(--ink-3); letter-spacing:.06em; font-size:15px; }
+  .field:focus{ border-color:var(--accent); }
+  .field:disabled{ opacity:.45; }
+  .btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:1px solid var(--accent);
+    border-radius:0;
+    color:var(--accent);
+    font:inherit;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.18em;
+    padding:15px 20px;
+    cursor:pointer;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .btn:active{ background:rgba(245,197,24,.14); }
+  .btn:disabled{ opacity:.4; }
+  .btn.ghost{
+    border-color:var(--hair-2);
+    color:var(--ink-2);
+    font-size:13px;
+    letter-spacing:.16em;
+    padding:13px 18px;
+  }
+  .hint{
+    margin:0 0 10px;
+    font-size:13.5px;
+    line-height:1.95;
+    letter-spacing:.06em;
+    color:var(--accent);
+  }
+  .fb{
+    margin:0 0 10px;
+    font-size:14px;
+    line-height:1.95;
+    letter-spacing:.06em;
+    color:var(--ink);
+  }
+  .fb b{ color:var(--accent); font-weight:800; }
+  .lock{
+    margin:0;
+    font-size:13px;
+    line-height:1.95;
+    letter-spacing:.05em;
+    color:var(--ink-3);
+  }
+
+  /* ── 网址 ───────────────────────────────────────────── */
+  .ok{
+    margin:0 0 22px;
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:.1em;
+    color:var(--accent);
+  }
+  .copy-label{
+    margin:0 0 10px;
+    font-size:13px;
+    line-height:1.9;
+    letter-spacing:.05em;
+    color:var(--ink-2);
+  }
+  .urlbox{
+    display:block;
+    width:100%;
+    margin:0 0 12px;
+    background:var(--panel);
+    border:1px solid var(--hair-2);
+    border-radius:0;
+    color:var(--ink-2);
+    font:inherit;
+    font-size:13px;
+    line-height:1.75;
+    letter-spacing:.02em;
+    padding:14px;
+    resize:none;
+    word-break:break-all;
+    outline:none;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .gate{
+    display:block;
+    position:relative;
+    text-decoration:none;
+    border:1px solid var(--accent);
+    background:transparent;
+    padding:20px 22px;
+    margin:26px 0 34px;
+    overflow:hidden;
+  }
+  .gate::before{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:4px; height:100%;
+    background:var(--accent);
+  }
+  .gate::after{
+    content:"";
+    position:absolute;
+    right:-24px; top:-24px;
+    width:72px; height:72px;
+    background:var(--accent);
+    opacity:.1;
+    transform:skewX(-20deg);
+  }
+  .gate .lat{
+    display:block;
+    font-size:10px;
+    letter-spacing:.34em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:9px;
+  }
+  .gate .zh{
+    display:block;
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:.14em;
+    color:var(--ink);
+    margin-bottom:7px;
+  }
+  .gate .hint{
+    display:block;
+    font-size:12.5px;
+    letter-spacing:.06em;
+    color:var(--ink-2);
+    margin:0;
+  }
+
+  .q{
+    margin:0 0 12px;
+    padding:0 0 0 15px;
+    border-left:1px solid var(--hair-2);
+    font-size:14.5px;
+    line-height:2;
+    color:#D6D6DA;
+    letter-spacing:.03em;
+  }
+  .q .who{
+    color:var(--ink-3);
+    font-size:12.5px;
+    letter-spacing:.08em;
+    margin-right:6px;
+  }
+
+  /* ── 完整聊天记录 ───────────────────────────────────── */
+  .chat{
+    background:var(--panel);
+    border:1px solid var(--hair);
+    margin:34px 0 0;
+    padding:5px 0;
+  }
+  .chat .ln{
+    padding:14px 16px 15px;
+    border-left:2px solid var(--hair-2);
+    border-bottom:1px solid rgba(42,42,49,.7);
+  }
+  .chat .ln:last-child{ border-bottom:0; }
+  .chat .ln.them{
+    border-left-color:var(--accent);
+    background:rgba(245,197,24,.04);
+  }
+  .chat .meta{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin:0 0 8px;
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--ink-3);
+  }
+  .chat .chip{
+    font-size:11.5px;
+    font-weight:800;
+    letter-spacing:.2em;
+    color:var(--ink-3);
+    padding-left:12px;
+  }
+  .chat .ln.them .chip{ color:var(--accent); }
+  .chat .txt{
+    margin:0;
+    font-size:16px;
+    line-height:1.95;
+    letter-spacing:.03em;
+    color:#D6D6DA;
+    word-break:break-word;
+    overflow-wrap:break-word;
+  }
+  .chat .ln.them .txt{ color:var(--ink); font-weight:600; }
+
+  .foot{
+    padding:44px 0 56px;
+    font-size:11px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+
+  @media (min-width:560px){
+    body{ font-size:16.5px; }
+    .top{ padding:78px 34px 56px; }
+    .top h1{ font-size:48px; }
+    .wrap{ padding:0 34px; }
+    .sec{ padding:80px 0 0; }
+    .sec-num{ font-size:40px; }
+    .say{ padding:32px 30px 28px; }
+    .say p{ font-size:20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="kicker">Puzzle / 02</p>
+  <h1>复&nbsp;原</h1>
+  <div class="bar"></div>
+  <p>画面碎了。<br>答对一题，回来一块。</p>
+</header>
+
+<main class="wrap">
+
+  <!-- ══════════ 画面 ══════════ -->
+  <div class="stage" id="stage">
+    <img class="clean" id="clean" src="shu.jpg" alt="">
+    <div class="shards" id="shards" aria-hidden="true"></div>
+    <div class="secret" id="secret">../index.html</div>
+  </div>
+
+  <p class="stage-note" id="stageNote">碎了 <b id="pieces">16</b> 块。</p>
+
+  <!-- ══════════ 手电筒（答完最后一题才出现） ══════════ -->
+  <div class="torchbar" id="torchbar" hidden>
+    <button class="torch" id="torchBtn" type="button">按住 &middot; 手电筒</button>
+    <p class="hint">按住别松，图上那行字会浮出来。</p>
+  </div>
+
+  <!-- ══════════ 01 上面那个框 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <span class="sec-lat">Your Words</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <p class="sec-note">下面每一句都是你说过的。名字挡掉了，剩下的是你当时描述的样子。</p>
+
+    <p class="step" id="qStep">Question 01 / 04</p>
+
+    <div class="say">
+      <p id="qQuote">&#9632;&#9632;&#9632;是个海马</p>
+    </div>
+    <p class="when" id="qWhen">2025-05-13 00:31:07</p>
+
+    <div class="ask">
+      <input id="qIn" class="field" type="text" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="她是谁">
+      <button id="qGo" class="btn" type="button">作答</button>
+    </div>
+    <p id="qHint" class="hint" hidden></p>
+    <p id="qFb" class="fb" hidden></p>
+  </section>
+
+  <!-- ══════════ 02 下面那个框 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <span class="sec-lat">The One</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <p class="sec-note">她唯一一位用「又美又强度高」来形容的限定女干员，她叫什么？</p>
+
+    <div class="ask">
+      <input id="sIn" class="field" type="text" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="她叫什么" disabled>
+      <button id="sGo" class="btn" type="button" disabled>作答</button>
+    </div>
+    <p id="sLock" class="lock">先把上面那四题答完，这个框才开。</p>
+    <p id="sHint" class="hint" hidden></p>
+    <p id="sFb" class="fb" hidden></p>
+  </section>
+
+  <!-- ══════════ 03 照出来之后 ══════════ -->
+  <section id="reveal" class="sec" hidden>
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <span class="sec-lat">Here</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <p class="ok">&#10004; 图回来了。字也照出来了。</p>
+
+    <p class="copy-label">长按下面这个框选中，或者点「复制」：</p>
+    <textarea id="urlbox" class="urlbox" readonly rows="2"></textarea>
+    <button id="copy" class="btn ghost" type="button">复制</button>
+    <p id="copymsg" class="hint" hidden></p>
+
+    <!-- ★★★ 第三页的地址。想指到别处，就改下面 href 和脚本里的 NEXT_URL ★★★ -->
+    <a class="gate" id="gate" href="c.html">
+      <span class="lat">Puzzle / 03</span>
+      <span class="zh">打开第三页</span>
+      <span class="hint">点这里 &rarr;</span>
+    </a>
+
+    <!-- ★★★ 钩子：完整聊天记录（逐字取自语料）★★★ -->
+    <div class="chat">
+
+      <div class="ln me">
+        <p class="meta"><span>2026-10-14 16:18:16</span><span class="chip">我</span></p>
+        <p class="txt">[链接/分享] 我们黍姐这下是彻底确诊钢板了</p>
+      </div>
+
+      <div class="ln them">
+        <p class="meta"><span>2026-10-14 16:46:51</span><span class="chip">她</span></p>
+        <p class="txt">咱黍姐在帮本子和同人里没那么平</p>
+      </div>
+
+      <div class="ln me">
+        <p class="meta"><span>2026-10-14 16:47:05</span><span class="chip">我</span></p>
+        <p class="txt">给我看看</p>
+      </div>
+
+      <div class="ln them">
+        <p class="meta"><span>2026-10-14 16:47:13</span><span class="chip">她</span></p>
+        <p class="txt">不过平胸穿黑衬衣是好文明</p>
+      </div>
+
+      <div class="ln them">
+        <p class="meta"><span>2026-10-14 16:48:10</span><span class="chip">她</span></p>
+        <p class="txt">鲸鱼帮我搜索10张明日方舟黍的涩图</p>
+      </div>
+
+      <div class="ln me">
+        <p class="meta"><span>2026-10-14 16:51:04</span><span class="chip">我</span></p>
+        <p class="txt">涩图不接 鲸鱼怕被封号</p>
+      </div>
+
+    </div>
+    <!-- ★★★ 聊天记录结束 ★★★ -->
+  </section>
+
+  <p class="foot">Private</p>
+
+</main>
+
+<script>
+(function(){
+  var d = document;
+
+  /* ★★★ 第三页的地址：改这一行就够 ★★★ */
+  var NEXT_URL = 'c.html';
+
+  /* ── 第 2 步取证的题：她说的原话，名字挡掉 ────────────── */
+  var QS = [
+    { q:'\u25A0\u25A0\u25A0是个海马',
+      t:'2025-05-13 00:31:07',
+      a:['温蒂','溫蒂','weedy','wendi'] },
+
+    { q:'\u25A0\u25A0\u25A0万圣节皮肤有大镰刀',
+      t:'2025-05-30 22:06:51',
+      a:['傀影','phantom','kuiying'] },
+
+    { q:'\u25A0\u25A0\u25A0手里拿着我的hk416老婆，背后还背着我的vector和sv40老婆',
+      t:'2025-04-24 10:59:32',
+      a:['能天使','exusiai','阿能'] },
+
+    { q:'而坐轮椅的病弱\u25A0\u25A0\u25A0可以爆杀博士',
+      t:'2026-04-07 22:04:14',
+      a:['夜莺','夜鶯','nightingale'] }
+  ];
+
+  /* ── 最后那题：黍 ──────────────────────────────────── */
+  var SHU = ['黍','黍黍','黍姐','shu'];
+
+  var el = function(id){ return d.getElementById(id); };
+  var stage  = el('stage'),  shards = el('shards');
+  var pieces = el('pieces'), stageNote = el('stageNote');
+  var qStep  = el('qStep'),  qQuote = el('qQuote'), qWhen = el('qWhen');
+  var qIn    = el('qIn'),    qGo    = el('qGo');
+  var qHint  = el('qHint'),  qFb    = el('qFb');
+  var sIn    = el('sIn'),    sGo    = el('sGo'),  sLock = el('sLock');
+  var sHint  = el('sHint'),  sFb    = el('sFb');
+  var torchbar = el('torchbar'), torchBtn = el('torchBtn');
+  var reveal = el('reveal'), urlbox = el('urlbox');
+  var copyBtn= el('copy'),   copymsg= el('copymsg');
+  var gate   = el('gate');
+
+  /* ── 1. 读 n（5–9，读不到就当 7） ───────────────────── */
+  function readN(){
+    var s = location.search || '';
+    var m = s.match(/[?&]n=([^&]*)/);
+    var v = m ? decodeURIComponent(m[1]) : '';
+    v = v.replace(/[^0-9]/g, '');
+    var k = parseInt(v, 10);
+    if (!(k >= 5 && k <= 9)) { k = 7; }
+    return k;
+  }
+  /* 网格边长 = n：n=5 → 5×5=25 块 · n=7 → 7×7=49 块 · n=9 → 9×9=81 块 */
+  var GRID_MIN = 5, GRID_MAX = 9;   /* 想整体降级，把 GRID_MAX 改成 7 即可 */
+  function gridOf(n){
+    if (!(n >= GRID_MIN && n <= GRID_MAX)) { n = 7; }
+    return n;
+  }
+  var N    = readN();
+  var COLS = gridOf(N);
+
+  /* ── 2. 把图切成 COLS×COLS 小块 ─────────────────────
+     用 background-position 切片：cols² 个 div，共用同一张背景图，
+     不生成 cols² 个 <img>，手机上只有一次解码、一次绘制。 */
+  var tiles = [];
+  (function build(){
+    var w    = 100 / COLS;          /* 每块占容器宽高的百分比 */
+    var step = 100 / (COLS - 1);    /* 背景位移的百分比步长 */
+    var size = (COLS * 100) + '%';
+    var frag = d.createDocumentFragment();
+    for (var r = 0; r < COLS; r++){
+      for (var c = 0; c < COLS; c++){
+        var t = d.createElement('div');
+        t.className = 'tile';
+        t.style.left   = (c * w) + '%';
+        t.style.top    = (r * w) + '%';
+        t.style.width  = w + '%';
+        t.style.height = w + '%';
+        t.style.backgroundSize     = size + ' ' + size;
+        t.style.backgroundPosition = (c * step) + '% ' + (r * step) + '%';
+        frag.appendChild(t);
+        tiles.push(t);
+      }
+    }
+    shards.appendChild(frag);
+  })();
+
+  /* 打乱：位移 ±1.5 格、旋转 ±15°、随机叠放次序 */
+  var order = [];
+  for (var i = 0; i < tiles.length; i++){ order.push(i); }
+  for (var k = order.length - 1; k > 0; k--){
+    var j = Math.floor(Math.random() * (k + 1));
+    var tmp = order[k]; order[k] = order[j]; order[j] = tmp;
+  }
+  for (var m2 = 0; m2 < order.length; m2++){
+    var tile = tiles[order[m2]];
+    var dx = (Math.random() * 2 - 1) * 150;
+    var dy = (Math.random() * 2 - 1) * 150;
+    var ro = (Math.random() * 2 - 1) * 15;
+    tile.style.transform = 'translate(' + dx.toFixed(2) + '%,' + dy.toFixed(2) + '%) rotate(' + ro.toFixed(2) + 'deg)';
+    tile.style.zIndex = 10 + Math.floor(Math.random() * 190);
+  }
+  pieces.textContent = tiles.length;
+  stageNote.innerHTML = '碎了 <b>' + tiles.length + '</b> 块。答对一题，回来一批。';
+
+  /* ── 判分：宽容一点 ────────────────────────────────── */
+  function fold(s){
+    s = String(s == null ? '' : s);
+    s = s.replace(/[\uFF01-\uFF5E]/g, function(c){
+      return String.fromCharCode(c.charCodeAt(0) - 0xFEE0);
+    });
+    s = s.replace(/[\u3000\s]/g, '');
+    s = s.toLowerCase();
+    return s.replace(/[\u00b7\u30fb\u3001\u3002\uff0c,.!?~\u201c\u201d"'\-\u2014\u2026]/g, '');
+  }
+  function hit(raw, list){
+    var v = fold(raw);
+    if (!v) { return false; }
+    for (var i = 0; i < list.length; i++){
+      var key = fold(list[i]);
+      if (key && (v === key || v.indexOf(key) >= 0)) { return true; }
+    }
+    return false;
+  }
+
+  /* ── 每答对一题，复原一批 ──────────────────────────── */
+  var qi = 0, restored = 0, doneAll = false;
+
+  function restoreUpTo(){
+    var target = Math.round(tiles.length * qi / QS.length);
+    var k = 0;
+    while (restored < target){
+      var t = tiles[order[restored]];
+      t.style.transitionDelay = (k * 12) + 'ms';   /* 错开一点，避免一次重绘太多 */
+      t.style.transform = 'none';
+      t.style.zIndex = 1;
+      restored++;
+      k++;
+    }
+    var left = tiles.length - restored;
+    if (left > 0){
+      stageNote.innerHTML = '还剩 <b>' + left + '</b> 块。';
+    } else {
+      stageNote.innerHTML = '画面全部回来了。';
+    }
+  }
+
+  function renderQ(){
+    var q = QS[qi];
+    qStep.textContent = 'Question ' + (qi + 1 < 10 ? '0' : '') + (qi + 1) + ' / ' + (QS.length < 10 ? '0' : '') + QS.length;
+    qQuote.innerHTML = q.q.replace(/\u25A0+/g, '<span class="bk">$&</span>');
+    qWhen.textContent = q.t;
+    qIn.value = '';
+    qIn.disabled = false;
+    qGo.disabled = false;
+    qHint.hidden = true;
+  }
+
+  var qTries = 0, gaveUp = '';
+  function answerQ(){
+    if (doneAll) { return; }
+    if (hit(qIn.value, QS[qi].a)){
+      qi++;
+      qTries = 0;
+      restoreUpTo();
+      qFb.hidden = false;
+      qFb.innerHTML = '第 <b>' + qi + '</b> 题对了 &middot; 画面复原了 <b>' + qi + ' / ' + QS.length + '</b>'
+                    + (gaveUp ? '（这一题是 <b>' + gaveUp + '</b>）' : '');
+      gaveUp = '';
+      if (qi >= QS.length){
+        doneAll = true;
+        qIn.disabled = true; qGo.disabled = true;
+        qStep.textContent = 'Question ' + QS.length + ' / ' + QS.length;
+        qHint.hidden = true;
+        sIn.disabled = false; sGo.disabled = false;
+        sLock.hidden = true;
+      } else {
+        renderQ();
+      }
+      return;
+    }
+    qTries++;
+    qHint.hidden = false;
+    if (qTries === 1){
+      qHint.textContent = '提示：翻回去看你自己那句话，描述就在字面上';
+    } else if (qTries === 2){
+      qHint.textContent = '提示：填的是干员名字，两个字到三个字';
+    } else {
+      qHint.textContent = '不考你了，去吧';
+      gaveUp = QS[qi].a[0];
+      qIn.value = gaveUp;
+      answerQ();
+    }
+  }
+
+  /* ── 4. 最后一题：答对就给完整的图 ─────────────────── */
+  var sTries = 0, sGaveUp = false;
+  function answerShu(){
+    if (hit(sIn.value, SHU)){
+      sHint.hidden = !sGaveUp;
+      sFb.hidden = false;
+      sFb.innerHTML = '对了。画面复原了。';
+      sGaveUp = false;
+      stage.className = 'stage clear';
+      stageNote.innerHTML = '完整了。图上有东西，去照。';
+      torchbar.hidden = false;
+      reveal.hidden = false;
+      urlbox.value = absUrl(NEXT_URL);
+      gate.setAttribute('href', NEXT_URL);
+      try { stage.scrollIntoView({ behavior:'smooth', block:'center' }); }
+      catch(e){ stage.scrollIntoView(); }
+      return;
+    }
+    sTries++;
+    sHint.hidden = false;
+    if (sTries === 1){
+      sHint.textContent = '提示：她说这话时，用了个叠字叫她';
+    } else if (sTries === 2){
+      sHint.textContent = '提示：一个字，年兽那一家里排行老六';
+    } else {
+      sHint.textContent = '不考你了，去吧';
+      sGaveUp = true;
+      sIn.value = '黍';
+      answerShu();
+    }
+  }
+
+  function absUrl(rel){
+    var a = d.createElement('a');
+    a.href = rel;
+    return a.href;
+  }
+
+  qGo.addEventListener('click', answerQ);
+  qIn.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.keyCode === 13){ e.preventDefault(); answerQ(); }
+  });
+  sGo.addEventListener('click', answerShu);
+  sIn.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.keyCode === 13){ e.preventDefault(); answerShu(); }
+  });
+
+  /* ── 5. 手电筒：按住拉对比度 ───────────────────────── */
+  var locked = false, lastTouch = 0;
+  function lightOn(){
+    d.body.className = 'torch';
+    torchBtn.className = 'torch on';
+  }
+  function lightOff(){
+    if (locked) { return; }
+    d.body.className = '';
+    torchBtn.className = 'torch';
+  }
+  torchBtn.addEventListener('touchstart', function(e){
+    e.preventDefault(); lightOn();
+  }, { passive:false });
+  torchBtn.addEventListener('touchend', function(e){
+    e.preventDefault(); lastTouch = Date.now(); lightOff();
+  }, { passive:false });
+  torchBtn.addEventListener('touchcancel', function(){ lastTouch = Date.now(); lightOff(); });
+  torchBtn.addEventListener('mousedown', function(){ lightOn(); });
+  torchBtn.addEventListener('mouseup', function(){ lightOff(); });
+  torchBtn.addEventListener('mouseleave', function(){ lightOff(); });
+  torchBtn.addEventListener('click', function(){
+    if (Date.now() - lastTouch < 700) { return; }
+    locked = !locked;
+    if (locked) { lightOn(); } else { d.body.className = ''; torchBtn.className = 'torch'; }
+  });
+
+  /* ── 6. 复制，clipboard 不行就退回老办法 ───────────── */
+  copyBtn.addEventListener('click', function(){
+    var txt = urlbox.value;
+    function ok(){ copymsg.hidden = false; copymsg.textContent = '复制好了。'; }
+    function fallback(){
+      try {
+        urlbox.removeAttribute('readonly');
+        urlbox.focus();
+        urlbox.select();
+        urlbox.setSelectionRange(0, txt.length);
+        var good = d.execCommand('copy');
+        urlbox.setAttribute('readonly','readonly');
+        if (good) { ok(); return; }
+      } catch(e){}
+      copymsg.hidden = false;
+      copymsg.textContent = '复制不了，就长按上面的框，全选，再复制。';
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(ok, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  renderQ();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<meta name="theme-color" content="#0E0E10">
+<title>还有一件事</title>
+<style>
+  :root{
+    --bg:#0E0E10;
+    --panel:#16161A;
+    --ink:#E8E8EA;
+    --ink-2:#9A9AA2;
+    --ink-3:#61616B;
+    --accent:#F5C518;
+    --hair:#2A2A31;
+    --hair-2:#3A3A43;
+  }
+  *{ box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:16px;
+    line-height:2;
+    letter-spacing:.02em;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .top{
+    position:relative;
+    padding:60px 24px 44px;
+    border-bottom:1px solid var(--hair);
+    overflow:hidden;
+  }
+  .top::after{
+    content:"";
+    position:absolute;
+    right:-30px; top:26px;
+    width:120px; height:200px;
+    background:var(--accent);
+    opacity:.06;
+    transform:skewX(-18deg);
+    pointer-events:none;
+  }
+  .kicker{
+    font-size:11px;
+    letter-spacing:.42em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin:0 0 20px;
+  }
+  .top h1{
+    margin:0 0 18px;
+    font-size:34px;
+    line-height:1.25;
+    font-weight:800;
+    letter-spacing:.12em;
+  }
+  .top .bar{
+    width:44px; height:3px;
+    background:var(--accent);
+    margin:0 0 22px;
+  }
+  .top p{
+    margin:0;
+    max-width:20em;
+    font-size:14.5px;
+    line-height:2;
+    color:var(--ink-2);
+    letter-spacing:.04em;
+  }
+
+  .wrap{
+    max-width:34rem;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  .sec{ padding:64px 0 0; }
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    margin-bottom:10px;
+  }
+  .sec-num{
+    font-size:34px;
+    line-height:1;
+    font-weight:800;
+    color:var(--accent);
+    letter-spacing:.02em;
+    margin-right:14px;
+  }
+  .sec-lat{
+    font-size:10.5px;
+    letter-spacing:.4em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding-bottom:3px;
+  }
+  .sec-head + .sec-line{
+    width:100%;
+    height:1px;
+    background:var(--hair);
+    margin-bottom:30px;
+  }
+
+  /* ── 写字区 ─────────────────────────────────────────── */
+  .letter{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--hair);
+    padding:28px 22px 26px;
+    overflow:hidden;
+  }
+  .letter::before{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:3px; height:100%;
+    background:var(--accent);
+  }
+  .letter::after{
+    content:"";
+    position:absolute;
+    right:-20px; bottom:-20px;
+    width:64px; height:64px;
+    background:var(--accent);
+    opacity:.07;
+    transform:skewX(-20deg);
+    pointer-events:none;
+  }
+  .letter p{
+    margin:0 0 22px;
+    font-size:17.5px;
+    line-height:2.15;
+    letter-spacing:.06em;
+    color:var(--ink);
+  }
+  .letter p:last-child{ margin-bottom:0; }
+
+  /* 占位文字的样子 */
+  .letter p.placeholder{
+    color:var(--ink-2);
+    font-weight:400;
+    letter-spacing:.04em;
+  }
+
+  .sign{
+    margin:30px 0 0;
+    font-size:11px;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+  .sign::before{
+    content:"";
+    display:block;
+    width:26px; height:1px;
+    background:var(--hair-2);
+    margin-bottom:16px;
+  }
+
+  /* ── 返回第一页 ─────────────────────────────────────── */
+  .back{
+    display:inline-block;
+    margin-top:56px;
+    border:1px solid var(--hair-2);
+    padding:15px 22px;
+    text-decoration:none;
+    font-size:13px;
+    letter-spacing:.2em;
+    color:var(--ink-2);
+  }
+  .back .zh{
+    color:var(--ink);
+    font-weight:700;
+    letter-spacing:.14em;
+    margin-right:10px;
+  }
+  .back .lat{
+    font-size:10px;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+
+  .foot{
+    padding:44px 0 56px;
+    font-size:11px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+
+  @media (min-width:560px){
+    body{ font-size:16.5px; }
+    .top{ padding:78px 34px 56px; }
+    .top h1{ font-size:40px; }
+    .wrap{ padding:0 34px; }
+    .sec{ padding:80px 0 0; }
+    .sec-num{ font-size:40px; }
+    .letter{ padding:34px 30px 32px; }
+  }
+  /* 这一页内容不依赖 JS；没有需要淡入的元素，故不写脚本。 */
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="kicker">One more thing</p>
+  <!-- 标题：想改就改这一行 -->
+  <h1>还有一件事</h1>
+  <div class="bar"></div>
+  <p>时间线看完了。<br>这一页留给我自己说。</p>
+</header>
+
+<main class="wrap">
+
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <span class="sec-lat">Message</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ★★★  要 写 的 话 · 只 改 这 一 块  ★★★
+
+         写法：把下面那个 <p class="placeholder">…</p> 整段，替换成你自己想说的话。
+         想分几段就写几个 <p>…</p>，每个 <p> 是一段，段落之间会自动留白。
+         除了这一段，文件里其它地方都不用动。
+
+         · 换行：一段之内想强制换行，就在要断的地方写 <br>。
+         · 加粗：想强调某一句，用 <strong>这句话</strong> 包起来。
+         · 不要写字面量 & 或 < 或 >，要写就写成 &amp; &lt; &gt;。
+
+         一句建议（只是建议，看完可以删掉这行注释）：
+           是邀请，不是表白 —— 说具体的事，不要用「我们」，
+           不要说年纪和结婚。
+         ═══════════════════════════════════════════════════════════════ -->
+
+    <div class="letter">
+
+      <p class="placeholder">［在这里写下你想对她说的话］</p>
+
+      <!-- 想加第二段，就把上面那行复制一份放在这下面，改掉文字即可：
+      <p>第二段。</p>
+      -->
+
+    </div>
+    <!-- ★★★  要 写 的 话 · 结 束  ★★★ -->
+
+    <p class="sign">Only for you</p>
+
+  </section>
+
+  <!-- 返回第一页（想删就整段删掉，不影响这一页） -->
+  <a class="back" href="three.html">
+    <span class="zh">&larr; 回到三年</span>
+    <span class="lat">Back</span>
+  </a>
+
+  <p class="foot">Private</p>
+
+</main>
+
+<!-- 这一页不需要脚本：文字全部是 HTML，禁用 JS 也能完整阅读。 -->
+
+</body>
+</html>

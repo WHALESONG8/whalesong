@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<meta name="theme-color" content="#0E0E10">
+<title>塔顶</title>
+<style>
+  :root{
+    --bg:#0E0E10;
+    --panel:#16161A;
+    --ink:#E8E8EA;
+    --ink-2:#9A9AA2;
+    --ink-3:#61616B;
+    --accent:#F5C518;
+    --hair:#2A2A31;
+    --hair-2:#3A3A43;
+  }
+  *{ box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  html,body{ margin:0; padding:0; }
+  [hidden]{ display:none !important; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:16px;
+    line-height:1.9;
+    letter-spacing:.02em;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+
+  /* ── 头部 ───────────────────────────────────────────── */
+  .top{
+    position:relative;
+    padding:60px 24px 44px;
+    border-bottom:1px solid var(--hair);
+    overflow:hidden;
+  }
+  .top::after{
+    content:"";
+    position:absolute;
+    right:-30px; top:26px;
+    width:120px; height:200px;
+    background:var(--accent);
+    opacity:.06;
+    transform:skewX(-18deg);
+    pointer-events:none;
+  }
+  .kicker{
+    font-size:11px;
+    letter-spacing:.42em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    margin:0 0 20px;
+  }
+  .top h1{
+    margin:0 0 18px;
+    font-size:40px;
+    line-height:1.15;
+    font-weight:800;
+    letter-spacing:.1em;
+  }
+  .top .bar{
+    width:44px; height:3px;
+    background:var(--accent);
+    margin:0 0 22px;
+  }
+  .top p{
+    margin:0;
+    max-width:20em;
+    font-size:14.5px;
+    line-height:2;
+    color:var(--ink-2);
+    letter-spacing:.04em;
+  }
+
+  .wrap{
+    max-width:34rem;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ── 章节头 ─────────────────────────────────────────── */
+  .sec{ padding:64px 0 0; }
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    margin-bottom:10px;
+  }
+  .sec-num{
+    font-size:34px;
+    line-height:1;
+    font-weight:800;
+    color:var(--accent);
+    letter-spacing:.02em;
+    margin-right:14px;
+  }
+  .sec-lat{
+    font-size:10.5px;
+    letter-spacing:.4em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+    padding-bottom:3px;
+  }
+  .sec-head + .sec-line{
+    width:100%;
+    height:1px;
+    background:var(--hair);
+    margin-bottom:30px;
+  }
+  .sec-note{
+    margin:0 0 24px;
+    font-size:13.5px;
+    line-height:1.95;
+    color:var(--ink-2);
+    letter-spacing:.04em;
+  }
+
+  /* ── 原话 ───────────────────────────────────────────── */
+  .date{
+    margin:0 0 18px;
+    font-size:13.5px;
+    letter-spacing:.14em;
+    color:var(--ink-2);
+  }
+  .creed{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--hair);
+    padding:30px 22px 28px;
+    margin:0 0 32px;
+    overflow:hidden;
+  }
+  .creed::before{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:4px; height:100%;
+    background:var(--accent);
+  }
+  .creed::after{
+    content:"";
+    position:absolute;
+    right:-22px; top:-22px;
+    width:80px; height:80px;
+    background:var(--accent);
+    opacity:.09;
+    transform:skewX(-20deg);
+    pointer-events:none;
+  }
+  .creed p{
+    margin:0;
+    font-size:19px;
+    line-height:1.95;
+    font-weight:700;
+    letter-spacing:.05em;
+  }
+
+  .beat{
+    margin:0 0 12px;
+    font-size:21px;
+    line-height:1.75;
+    font-weight:800;
+    letter-spacing:.08em;
+  }
+  .beat.dim{
+    margin:20px 0 0;
+    font-size:14.5px;
+    font-weight:600;
+    line-height:2;
+    color:var(--ink-2);
+    letter-spacing:.05em;
+  }
+
+  /* ── 输入 ───────────────────────────────────────────── */
+  .ask{
+    display:flex;
+    gap:10px;
+    align-items:stretch;
+    margin:0 0 14px;
+  }
+  .field{
+    flex:1 1 auto;
+    min-width:0;
+    background:var(--panel);
+    border:1px solid var(--hair-2);
+    border-radius:0;
+    color:var(--ink);
+    font:inherit;
+    font-size:17px;
+    letter-spacing:.12em;
+    padding:15px 16px;
+    outline:none;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .field::placeholder{ color:var(--ink-3); letter-spacing:.06em; font-size:15px; }
+  .field:focus{ border-color:var(--accent); }
+  .btn{
+    flex:0 0 auto;
+    background:transparent;
+    border:1px solid var(--accent);
+    border-radius:0;
+    color:var(--accent);
+    font:inherit;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:.18em;
+    padding:15px 20px;
+    cursor:pointer;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .btn:active{ background:rgba(245,197,24,.14); }
+  .btn.ghost{
+    border-color:var(--hair-2);
+    color:var(--ink-2);
+    font-size:13px;
+    letter-spacing:.16em;
+    padding:13px 18px;
+  }
+  .hint{
+    margin:0 0 10px;
+    font-size:13.5px;
+    line-height:1.95;
+    letter-spacing:.06em;
+    color:var(--accent);
+  }
+
+  /* ── 答对之后 ───────────────────────────────────────── */
+  .ok{
+    margin:0 0 24px;
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:.1em;
+    color:var(--accent);
+  }
+  .q{
+    margin:0 0 12px;
+    padding:0 0 0 15px;
+    border-left:1px solid var(--hair-2);
+    font-size:14.5px;
+    line-height:2;
+    color:#D6D6DA;
+    letter-spacing:.03em;
+  }
+  .q .who{
+    color:var(--ink-3);
+    font-size:12.5px;
+    letter-spacing:.08em;
+    margin-right:6px;
+  }
+
+  /* ── 完整聊天记录 ───────────────────────────────────── */
+  .chat{
+    background:var(--panel);
+    border:1px solid var(--hair);
+    margin:0 0 26px;
+    padding:5px 0;
+  }
+  .chat .ln{
+    padding:14px 16px 15px;
+    border-left:2px solid var(--hair-2);
+    border-bottom:1px solid rgba(42,42,49,.7);
+  }
+  .chat .ln:last-child{ border-bottom:0; }
+  .chat .ln.them{
+    border-left-color:var(--accent);
+    background:rgba(245,197,24,.04);
+  }
+  .chat .meta{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin:0 0 8px;
+    font-size:11px;
+    letter-spacing:.14em;
+    color:var(--ink-3);
+  }
+  .chat .chip{
+    font-size:11.5px;
+    font-weight:800;
+    letter-spacing:.2em;
+    color:var(--ink-3);
+    padding-left:12px;
+  }
+  .chat .ln.them .chip{ color:var(--accent); }
+  .chat .txt{
+    margin:0;
+    font-size:16px;
+    line-height:1.95;
+    letter-spacing:.03em;
+    color:#D6D6DA;
+    word-break:break-word;
+    overflow-wrap:break-word;
+  }
+  .chat .ln.them .txt{ color:var(--ink); font-weight:600; }
+
+  .gate{
+    display:block;
+    position:relative;
+    text-decoration:none;
+    border:1px solid var(--accent);
+    background:transparent;
+    padding:20px 22px;
+    margin:0 0 26px;
+    overflow:hidden;
+  }
+  .gate::before{
+    content:"";
+    position:absolute;
+    left:0; top:0;
+    width:4px; height:100%;
+    background:var(--accent);
+  }
+  .gate::after{
+    content:"";
+    position:absolute;
+    right:-24px; top:-24px;
+    width:72px; height:72px;
+    background:var(--accent);
+    opacity:.1;
+    transform:skewX(-20deg);
+  }
+  .gate .lat{
+    display:block;
+    font-size:10px;
+    letter-spacing:.34em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:9px;
+  }
+  .gate .zh{
+    display:block;
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:.14em;
+    color:var(--ink);
+    margin-bottom:7px;
+  }
+  .gate .hint{
+    display:block;
+    font-size:12.5px;
+    letter-spacing:.06em;
+    color:var(--ink-2);
+    margin:0;
+  }
+
+  .copy-label{
+    margin:0 0 10px;
+    font-size:13px;
+    line-height:1.9;
+    letter-spacing:.05em;
+    color:var(--ink-2);
+  }
+  .urlbox{
+    display:block;
+    width:100%;
+    margin:0 0 12px;
+    background:var(--panel);
+    border:1px solid var(--hair-2);
+    border-radius:0;
+    color:var(--ink-2);
+    font:inherit;
+    font-size:13px;
+    line-height:1.75;
+    letter-spacing:.02em;
+    padding:14px;
+    resize:none;
+    word-break:break-all;
+    outline:none;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+
+  .foot{
+    padding:44px 0 56px;
+    font-size:11px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--ink-3);
+  }
+
+  @media (min-width:560px){
+    body{ font-size:16.5px; }
+    .top{ padding:78px 34px 56px; }
+    .top h1{ font-size:48px; }
+    .wrap{ padding:0 34px; }
+    .sec{ padding:80px 0 0; }
+    .sec-num{ font-size:40px; }
+    .creed{ padding:36px 30px 34px; }
+    .creed p{ font-size:21px; }
+    .beat{ font-size:24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="kicker">Puzzle / 01</p>
+  <h1>塔&nbsp;顶</h1>
+  <div class="bar"></div>
+  <p>一句玩笑，隔了一年多。<br>塔是真的。</p>
+</header>
+
+<main class="wrap">
+
+  <!-- ══════════ 01 我说过的那句 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <span class="sec-lat">The Line</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <p class="date">2025 年 6 月 21 日，我跟你说过一句话——</p>
+
+    <div class="creed">
+      <p>「这样，你打开三角洲，进入地图长弓溪谷，到一个叫阿米娅小镇的地方，爬到塔顶跳下去就能见到牢猫了。」</p>
+    </div>
+
+    <p class="beat">我是骗你的。</p>
+    <p class="beat">但塔顶确实有东西。你自己去看看。</p>
+    <p class="beat dim">顺便数一数：从梯子开始，要跳几次、攀几次，才摸得到最上面那个鸟窝。</p>
+  </section>
+
+  <!-- ══════════ 02 填一个数 ══════════ -->
+  <section class="sec">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <span class="sec-lat">Answer</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <p class="sec-note">你在塔顶数到几？</p>
+
+    <div class="ask">
+      <input id="in" class="field" type="text" inputmode="numeric" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="填一个数">
+      <button id="go" class="btn" type="button">报数</button>
+    </div>
+
+    <p id="hint" class="hint" hidden></p>
+  </section>
+
+  <!-- ══════════ 03 答完之后 ══════════ -->
+  <section id="done" class="sec" hidden>
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <span class="sec-lat">Back To You</span>
+    </div>
+    <div class="sec-line"></div>
+
+    <p class="ok">&#10004; 记住了。</p>
+
+    <!-- ★★★ 钩子：完整聊天记录（逐字取自语料）★★★ -->
+    <div class="chat">
+
+      <div class="ln them">
+        <p class="meta"><span>2025-06-21 09:27:04</span><span class="chip">她</span></p>
+        <p class="txt">三角洲测试服解包出来的</p>
+      </div>
+
+      <div class="ln me">
+        <p class="meta"><span>2025-06-21 09:28:04</span><span class="chip">我</span></p>
+        <p class="txt">要是有阿米娅挂件就好了</p>
+      </div>
+
+      <div class="ln me">
+        <p class="meta"><span>2025-06-21 09:30:03</span><span class="chip">我</span></p>
+        <p class="txt">那你快来玩好吗</p>
+      </div>
+
+      <div class="ln me">
+        <p class="meta"><span>2025-06-21 09:31:38</span><span class="chip">我</span></p>
+        <p class="txt">有张地图的有个地点叫阿米娅小镇</p>
+      </div>
+
+      <div class="ln me">
+        <p class="meta"><span>2025-06-21 10:37:42</span><span class="chip">我</span></p>
+        <p class="txt">快去玩快去玩</p>
+      </div>
+
+      <div class="ln them">
+        <p class="meta"><span>2025-06-21 10:37:56</span><span class="chip">她</span></p>
+        <p class="txt">学习阶段</p>
+      </div>
+
+      <div class="ln me">
+        <p class="meta"><span>2025-06-21 10:38:56</span><span class="chip">我</span></p>
+        <p class="txt">过完新手我带你捡垃圾</p>
+      </div>
+
+      <div class="ln them">
+        <p class="meta"><span>2025-06-21 10:41:22</span><span class="chip">她</span></p>
+        <p class="txt">感觉可能就是单向联动了</p>
+      </div>
+
+      <div class="ln me">
+        <p class="meta"><span>2025-06-21 10:41:51</span><span class="chip">我</span></p>
+        <p class="txt">这样，你打开三角洲，进入地图长弓溪谷，到一个叫阿米娅小镇的地方，爬到塔顶跳下去就能见到牢猫了</p>
+      </div>
+
+      <div class="ln me">
+        <p class="meta"><span>2025-06-21 10:54:32</span><span class="chip">我</span></p>
+        <p class="txt">还有个地图里有巴别塔</p>
+      </div>
+
+    </div>
+    <!-- ★★★ 聊天记录结束 ★★★ -->
+
+    <p class="sec-note" style="margin:30px 0 16px;">这十句还给你。下一页在下面——</p>
+
+    <!-- ★★★ 第二页的入口。想改目标就改 href 里的 ../b/ ★★★ -->
+    <a class="gate" id="gate" href="b.html?n=7">
+      <span class="lat">Puzzle / 02</span>
+      <span class="zh">打开第二页</span>
+      <span class="hint">点这里 &rarr;</span>
+    </a>
+
+    <p class="copy-label">微信里点不动的话，复制这个地址，粘到浏览器顶上：</p>
+    <textarea id="urlbox" class="urlbox" readonly rows="2"></textarea>
+    <button id="copy" class="btn ghost" type="button">复制</button>
+    <p id="copymsg" class="hint" hidden></p>
+  </section>
+
+  <p class="foot">Private</p>
+
+</main>
+
+<script>
+(function(){
+  var d = document;
+
+  var input  = d.getElementById('in');
+  var goBtn  = d.getElementById('go');
+  var hint   = d.getElementById('hint');
+  var done   = d.getElementById('done');
+  var gate   = d.getElementById('gate');
+  var urlbox = d.getElementById('urlbox');
+  var copyBtn= d.getElementById('copy');
+  var copymsg= d.getElementById('copymsg');
+
+  var tries  = 0;
+  var passed = false;
+
+  /* 全角 → 半角，再只留下数字 */
+  function digits(s){
+    s = String(s == null ? '' : s);
+    s = s.replace(/[\uFF10-\uFF19]/g, function(c){
+      return String.fromCharCode(c.charCodeAt(0) - 0xFEE0);
+    });
+    return s.replace(/[^0-9]/g, '');
+  }
+  /* 顺手认一下汉字，免得她打字麻烦 */
+  var cn = { '五':'5', '六':'6', '七':'7', '八':'8', '九':'9' };
+
+  function toNumber(raw){
+    var s = String(raw == null ? '' : raw).replace(/\s/g, '');
+    if (cn[s]) return cn[s];
+    var v = digits(s);
+    if (v.length === 1 && v >= '5' && v <= '9') return v;
+    return '';
+  }
+
+  function absUrl(rel){
+    var a = d.createElement('a');
+    a.href = rel;
+    return a.href;
+  }
+
+  function pass(n){
+    passed = true;
+    var rel = 'b.html?n=' + n;
+    gate.setAttribute('href', rel);
+    urlbox.value = absUrl(rel);
+    done.hidden = false;
+    try { done.scrollIntoView({ behavior:'smooth', block:'start' }); }
+    catch(e){ done.scrollIntoView(); }
+  }
+
+  function report(){
+    if (passed) return;
+    var n = toNumber(input.value);
+    if (n) { hint.hidden = true; pass(n); return; }
+
+    tries++;
+    hint.hidden = false;
+    if (tries === 1) {
+      hint.textContent = '提示：和爬塔有关';
+    } else if (tries === 2) {
+      hint.textContent = '提示：是 5 到 9 之间的一个数';
+    } else {
+      hint.textContent = '不考你了，去吧';
+      pass('7');
+    }
+  }
+
+  goBtn.addEventListener('click', report);
+  input.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.keyCode === 13) { e.preventDefault(); report(); }
+  });
+
+  /* ── 复制，clipboard 不行就退回老办法 ── */
+  copyBtn.addEventListener('click', function(){
+    var txt = urlbox.value;
+    function ok(){ copymsg.hidden = false; copymsg.textContent = '复制好了。'; }
+    function fallback(){
+      try {
+        urlbox.removeAttribute('readonly');
+        urlbox.focus();
+        urlbox.select();
+        urlbox.setSelectionRange(0, txt.length);
+        var good = d.execCommand('copy');
+        urlbox.setAttribute('readonly','readonly');
+        if (good) { ok(); return; }
+      } catch(e){}
+      copymsg.hidden = false;
+      copymsg.textContent = '复制不了，就长按上面的框，全选，再复制。';
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(ok, fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
