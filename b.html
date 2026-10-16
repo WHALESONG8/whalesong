@@ -137,16 +137,18 @@
       rgba(14,14,16,.88) 26%,
       rgba(14,14,16,.88) 74%,
       rgba(14,14,16,0) 100%);
-    color:rgba(232,232,234,.07);
+    /* 暗态：文字完全不画（alpha 0），和背景逐像素零差；亮态再显式换成实色 */
+    color:rgba(245,197,24,0);
+    text-shadow:none;
     font-size:13.5px;
     line-height:1.75;
     letter-spacing:.1em;
     word-break:break-all;
     pointer-events:none;
-    transition:color .12s linear, text-shadow .12s linear;
+    transition:color .1s linear, text-shadow .1s linear;
   }
   body.torch .secret{
-    color:var(--accent);
+    color:#F5C518;
     text-shadow:0 0 12px rgba(245,197,24,.55);
   }
 
@@ -520,7 +522,7 @@
   <div class="stage" id="stage">
     <img class="clean" id="clean" src="shu.jpg" alt="">
     <div class="shards" id="shards" aria-hidden="true"></div>
-    <div class="secret" id="secret">../index.html</div>
+    <div class="secret" id="secret">黍难道不是大钢板吗？</div>
   </div>
 
   <p class="stage-note" id="stageNote">碎了 <b id="pieces">16</b> 块。</p>
